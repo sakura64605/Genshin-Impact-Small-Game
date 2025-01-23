@@ -1,6 +1,4 @@
-import ui.GameJFrame;
-import ui.LoginJFrame;
-import ui.RegisterJFrame;
+import com.denghongjie.*;
 
 public class Action {
     public static void main(String[] args) {
