@@ -1,4 +1,4 @@
-package com.denghongjie;
+package com.denghongjie.ui;
 
 import javax.swing.*;
 
