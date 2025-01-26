@@ -1,10 +1,33 @@
 package com.denghongjie.ui;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
-public class GameJFrame extends JFrame {
-    int[][] arr = new int[5][5];
+public class GameJFrame extends JFrame implements KeyListener, ActionListener {
+    int[][] arr = new int[4][4];
+    int[][] win = new int[][]  {
+            {1,2,3,4},
+            {5,6,7,8},
+            {9,10,11,12},
+            {13,14,15,0},
+    };
+    int x = 0;
+    int y = 0;
+    int count = 0;
+    String path = "images/animal/animal1/";
+    JMenuItem replayJMenuItem = new JMenuItem("Replay");
+    JMenuItem reLoginItem = new JMenuItem("ReLogin");
+    JMenuItem exitJMenuItem = new JMenuItem("Exit");
+    JMenuItem Animal = new JMenuItem("Animal");
+    JMenuItem Girl = new JMenuItem("Girl");
+    JMenuItem Sport = new JMenuItem("Sport");
+
+    JMenuItem aboutJMenuItem = new JMenuItem("Author");
     public GameJFrame() {
         //初始化菜单
         initJFrame();
@@ -18,7 +41,7 @@ public class GameJFrame extends JFrame {
     }
 
     private void initData() {
-        int[] testArr = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
+        int[] testArr = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0};
 
         Random random = new Random();
         for (int i = 0; i < testArr.length; i++) {
@@ -29,20 +52,39 @@ public class GameJFrame extends JFrame {
         }
         int cnt = 0;
         for (int i = 0; i < testArr.length; i++) {
-            arr[i / 5][i % 5] = testArr[i];
+            if (testArr[i] == 0) {
+                x = i / 4;
+                y = i % 4;
+            }
+            arr[i / 4][i % 4] = testArr[i];
         }
     }
 
     private void initImage() {
-        for(int i = 0; i < 5; i++){
-            for(int j = 0; j < 5; j++){
-                ImageIcon icon = new ImageIcon("images/少女/image" + arr[i][j] + ".png");
+        this.getContentPane().removeAll();
+
+        if(victory()){
+            JLabel label = new JLabel(new ImageIcon("images/win.png"));
+            label.setBounds(160,20,250,80);
+            this.getContentPane().add(label);
+        }
+
+        JLabel stepLabel = new JLabel("steps: " + count);
+        stepLabel.setBounds(10,10,100,20);
+        this.getContentPane().add(stepLabel);
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                ImageIcon icon = new ImageIcon(path + arr[i][j] + ".jpg");
                 JLabel label = new JLabel(icon);
                 //指定位置
-                label.setBounds(110 * j, 110 * i, icon.getIconWidth(), icon.getIconHeight());
+                label.setBounds(110 * j + 80, 110 * i + 110, icon.getIconWidth(), icon.getIconHeight());
+                label.setBorder(new BevelBorder(BevelBorder.LOWERED));
                 this.getContentPane().add(label);
             }
         }
+
+        this.getContentPane().repaint();
     }
 
     private void initJMenuBar() {
@@ -50,19 +92,24 @@ public class GameJFrame extends JFrame {
 
         JMenu functionJMenu = new JMenu("function");
         JMenu aboutJMenu = new JMenu("About");
+        JMenu changeImageJMenu = new JMenu("changeImage");
 
-        JMenuItem replayJMenuItem = new JMenuItem("Replay");
-        JMenuItem reLoginItem = new JMenuItem("ReLogin");
-        JMenuItem exitJMenuItem = new JMenuItem("Exit");
-
-        JMenuItem aboutJMenuItem = new JMenuItem("About");
+        changeImageJMenu.add(Animal);
+        changeImageJMenu.add(Girl);
+        changeImageJMenu.add(Sport);
 
         //添加条目
+        functionJMenu.add(changeImageJMenu);
         functionJMenu.add(replayJMenuItem);
         functionJMenu.add(reLoginItem);
         functionJMenu.add(exitJMenuItem);
 
         aboutJMenu.add(aboutJMenuItem);
+
+        replayJMenuItem.addActionListener(this);
+        reLoginItem.addActionListener(this);
+        exitJMenuItem.addActionListener(this);
+        aboutJMenuItem.addActionListener(this);
 
         menuBar.add(functionJMenu);
         menuBar.add(aboutJMenu);
@@ -81,5 +128,126 @@ public class GameJFrame extends JFrame {
         //设置关闭界面
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(null);
+        this.addKeyListener(this);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == 32) {
+            this.getContentPane().removeAll();
+            JLabel label = new JLabel(new ImageIcon(path+"all.jpg"));
+            label.setBounds(0, 0, 610, 680);
+            this.getContentPane().add(label);
+            this.getContentPane().repaint();
+//            this.setVisible(true);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(victory()){
+            return;
+        }
+        int cnt = 0;
+        int key = e.getKeyCode();
+        if(key == 37 || key == 65){
+            count++;
+            System.out.println("move left");
+            if(y == 3){
+                return;
+            }
+            arr[x][y] = arr[x][y + 1];
+            arr[x][y + 1] = 0;
+            y++;
+            initImage();
+        }
+        else if(key == 38 || key == 87){
+            count++;
+            System.out.println("move up");
+            if(x == 3){
+                return;
+            }
+            arr[x][y] = arr[x + 1][y];
+            arr[x + 1][y] = 0;
+            x++;
+            initImage();
+        }
+        else if(key == 39 || key == 68){
+            count++;
+            System.out.println("move right");
+            if(y == 0){
+                return;
+            }
+            arr[x][y] = arr[x][y - 1];
+            arr[x][y - 1] = 0;
+            y--;
+            initImage();
+        }
+        else if(key == 40 || key == 83){
+            count++;
+            System.out.println("move down");
+            if(x == 0){
+                return;
+            }
+            arr[x][y] = arr[x - 1][y];
+            arr[x - 1][y] = 0;
+            x--;
+            initImage();
+        }
+        else if(key == 32){
+            initImage();
+        }
+        else if(key == 82){
+            arr = win;
+            initImage();
+        }
+        //System.out.println(key);
+    }
+
+    public boolean victory(){
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                if(arr[i][j] != win[i][j]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object click = e.getSource();
+        if(click == replayJMenuItem){
+            System.out.println("replay");
+            initData();
+            count = 0;
+            initImage();
+
+        }else if(click == reLoginItem){
+            System.out.println("reLogin");
+            this.setVisible(false);
+            new LoginJFrame();
+        }else if(click == exitJMenuItem){
+            System.exit(0);
+        }else if(click == aboutJMenuItem){
+            System.out.println("about");
+
+            JDialog aboutDialog = new JDialog();
+            JLabel label = new JLabel(new ImageIcon("images/about.png"));
+            label.setBounds(0,0,300,300);
+            aboutDialog.getContentPane().add(label);
+            aboutDialog.setBounds(0,0,330,330);
+            aboutDialog.setAlwaysOnTop(true);
+            aboutDialog.setLocationRelativeTo(null);
+            aboutDialog.setModal(true);
+            aboutDialog.setVisible(true);
+        }
     }
 }
