@@ -50,7 +50,6 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             testArr[i] = testArr[index];
             testArr[index] = temp;
         }
-        int cnt = 0;
         for (int i = 0; i < testArr.length; i++) {
             if (testArr[i] == 0) {
                 x = i / 4;
@@ -110,6 +109,9 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         reLoginItem.addActionListener(this);
         exitJMenuItem.addActionListener(this);
         aboutJMenuItem.addActionListener(this);
+        Animal.addActionListener(this);
+        Girl.addActionListener(this);
+        Sport.addActionListener(this);
 
         menuBar.add(functionJMenu);
         menuBar.add(aboutJMenu);
@@ -204,7 +206,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             initImage();
         }
         else if(key == 82){
-            arr = win;
+            for (int i = 0; i < 16; i++) {
+                arr[i / 4][i % 4] = i + 1;
+            }
+            arr[3][3] = 0;
             initImage();
         }
         //System.out.println(key);
@@ -226,10 +231,9 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         Object click = e.getSource();
         if(click == replayJMenuItem){
             System.out.println("replay");
-            initData();
             count = 0;
+            initData();
             initImage();
-
         }else if(click == reLoginItem){
             System.out.println("reLogin");
             this.setVisible(false);
@@ -248,6 +252,27 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             aboutDialog.setLocationRelativeTo(null);
             aboutDialog.setModal(true);
             aboutDialog.setVisible(true);
+        }else if(click == Animal){
+            Random rand = new Random();
+            int order = rand.nextInt(1,9);
+            this.path = "images/animal/animal" + order + "/";
+            count = 0;
+            initData();
+            initImage();
+        }else if(click == Girl){
+            Random rand = new Random();
+            int order = rand.nextInt(1,14);
+            this.path = "images/girl/girl" + order + "/";
+            count = 0;
+            initData();
+            initImage();
+        }else if(click == Sport){
+            Random rand = new Random();
+            int order = rand.nextInt(1,11);
+            this.path = "images/sport/sport" + order + "/";
+            count = 0;
+            initData();
+            initImage();
         }
     }
 }
