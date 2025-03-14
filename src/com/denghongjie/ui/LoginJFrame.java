@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import com.denghongjie.util.UserManager; // 添加这行导入
+
 public class LoginJFrame extends JFrame {
     // 添加表单组件
     private JTextField usernameField;
@@ -53,9 +55,9 @@ public class LoginJFrame extends JFrame {
             return;
         }
         
-        // 调用用户验证
-        if (com.denghongjie.util.UserManager.login(username, password)) {
-            new GameJFrame(); // 登录成功启动游戏
+        // 修改调用方式（移除包名前缀）
+        if (UserManager.login(username, password)) { 
+            new GameJFrame();
             dispose();
         } else {
             JOptionPane.showMessageDialog(this, "验证失败，请检查凭据");

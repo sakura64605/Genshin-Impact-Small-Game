@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import com.denghongjie.util.UserManager;  // 添加正确的导入
+
 public class RegisterJFrame extends JFrame {
     // 添加表单组件
     private JTextField usernameField;
@@ -56,11 +58,11 @@ public class RegisterJFrame extends JFrame {
             return;
         }
 
-        // 调用用户管理类进行注册
-        if (com.denghongjie.util.UserManager.register(username, password)) {
+        // 修正调用方式（移除错误包名前缀）
+        if (UserManager.register(username, password)) {
             JOptionPane.showMessageDialog(this, "注册成功");
-            new LoginJFrame();  // 跳转回登录界面
-            this.dispose();     // 关闭当前窗口
+            new LoginJFrame();
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "用户名已存在");
         }
