@@ -1,4 +1,4 @@
-package com.denghongjie.util;
+package com.denghongjie.ui;
 
 import java.io.*;
 import java.util.HashMap;
@@ -25,12 +25,16 @@ public class UserManager {
 
     // 用户注册
     public static boolean register(String username, String password) {
+        System.out.println("尝试注册用户：" + username);  // 调试日志
         if (users.containsKey(username)) {
+            System.out.println("用户名已存在：" + username);
             return false;
         }
-        
+
         users.put(username, password);
-        return saveUsers();
+        boolean result = saveUsers();
+        System.out.println("注册结果：" + result);  // 查看保存结果
+        return result;
     }
 
     // 用户登录验证
@@ -46,7 +50,7 @@ public class UserManager {
                 dataFile.getParentFile().mkdirs();
                 dataFile.createNewFile();
             }
-            
+
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile))) {
                 oos.writeObject(users);
                 return true;

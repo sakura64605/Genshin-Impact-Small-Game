@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-import com.denghongjie.util.UserManager; // 添加这行导入
-
 public class LoginJFrame extends JFrame {
     // 添加表单组件
     private JTextField usernameField;
@@ -13,33 +11,41 @@ public class LoginJFrame extends JFrame {
 
     public LoginJFrame() {
         this.setSize(490, 430);
-        this.setTitle("用户登录"); // 修正标题
-        this.setLayout(new GridLayout(3, 2, 10, 10)); // 网格布局
+        this.setTitle("用户登录");
+        // 修改为更灵活的布局
+        this.setLayout(new BorderLayout(10, 20));
         
-        // 初始化组件
+        // 创建表单面板
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 15));
+        formPanel.add(new JLabel("用户名:", SwingConstants.RIGHT));
         usernameField = new JTextField();
+        formPanel.add(usernameField);
+        formPanel.add(new JLabel("密码:", SwingConstants.RIGHT));
         passwordField = new JPasswordField();
+        formPanel.add(passwordField);
         
-        // 添加表单元素
-        add(new JLabel("用户名:"));
-        add(usernameField);
-        add(new JLabel("密码:"));
-        add(passwordField);
-        
-        // 登录按钮
+        // 创建按钮面板
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         JButton loginBtn = new JButton("登录");
+        loginBtn.setPreferredSize(new Dimension(120, 35)); // 设置按钮尺寸
         loginBtn.addActionListener(this::handleLogin);
-        add(loginBtn);
-
-        // 注册按钮
+        
         JButton registerBtn = new JButton("去注册");
+        registerBtn.setPreferredSize(new Dimension(120, 35));
         registerBtn.addActionListener(e -> {
             new RegisterJFrame();
             dispose();
         });
-        add(registerBtn);
 
-        // 保留原有设置
+        // 添加组件到面板
+        buttonPanel.add(loginBtn);
+        buttonPanel.add(registerBtn);
+        
+        // 添加边距并组合布局
+        formPanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 20));
+        this.add(formPanel, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
+
         this.setAlwaysOnTop(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE); // 修改关闭行为
@@ -55,9 +61,9 @@ public class LoginJFrame extends JFrame {
             return;
         }
         
-        // 修改调用方式（移除包名前缀）
-        if (UserManager.login(username, password)) { 
-            new GameJFrame();
+        // 调用用户验证
+        if (com.denghongjie.ui.UserManager.login(username, password)) {
+            new GameJFrame(); // 登录成功启动游戏
             dispose();
         } else {
             JOptionPane.showMessageDialog(this, "验证失败，请检查凭据");
