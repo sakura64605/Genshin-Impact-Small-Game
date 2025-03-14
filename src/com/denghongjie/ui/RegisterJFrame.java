@@ -80,6 +80,9 @@ public class RegisterJFrame extends JFrame {
         registerBtn.setForeground(Color.WHITE);
         registerBtn.setFocusPainted(false);
         registerBtn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        
+        // 添加事件监听绑定（关键修复）
+        registerBtn.addActionListener(this::handleRegister);  // ← 在此处添加监听绑定
 
         // 组合界面元素
         contentPane.add(createButtonPanel(registerBtn), BorderLayout.SOUTH);
