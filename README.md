@@ -1,0 +1,1 @@
+Although the original God game but the picture is not segmented, did not join the game content, and the current login registration only exists on the surface, no impact on the content, Pending follow-up
