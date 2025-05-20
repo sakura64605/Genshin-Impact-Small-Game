@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     int[][] arr = new int[4][4];
@@ -253,8 +254,8 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             aboutDialog.setModal(true);
             aboutDialog.setVisible(true);
         }else if(click == Animal){
-            Random rand = new Random();
-            int order = rand.nextInt(1,9);
+            RandomGenerator random = RandomGenerator.getDefault();
+            int order = random.nextInt(1,9);
             this.path = "images/animal/animal" + order + "/";
             count = 0;
             initData();

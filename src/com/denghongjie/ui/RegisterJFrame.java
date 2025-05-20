@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-import com.denghongjie.ui.UserManager;
+
 
 public class RegisterJFrame extends JFrame {
     // 添加表单组件
@@ -115,20 +115,28 @@ public class RegisterJFrame extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
         String confirm = new String(confirmField.getPassword());
-
+    
         // 输入验证
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "用户名和密码不能为空");
             return;
         }
-
+    
         if (!password.equals(confirm)) {
             JOptionPane.showMessageDialog(this, "两次密码输入不一致");
             return;
         }
-
-        // 修正方法调用（原路径错误）
-        if (UserManager.register(username, password)) { 
+    
+        // 调试输出
+        System.out.println("尝试注册用户: " + username);
+        System.out.println("数据库连接信息:");
+        System.out.println("URL: " + UserManager.getDbUrl());  // 改为调用公共方法
+        System.out.println("用户: " + UserManager.getDbUser());  // 改为调用公共方法
+    
+        boolean result = UserManager.register(username, password);
+        System.out.println("注册操作结果: " + result);
+        
+        if (result) {
             JOptionPane.showMessageDialog(this, "注册成功");
             new LoginJFrame();
             this.dispose();

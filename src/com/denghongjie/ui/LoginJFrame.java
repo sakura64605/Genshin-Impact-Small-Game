@@ -61,8 +61,8 @@ public class LoginJFrame extends JFrame {
             return;
         }
         
-        // 调用用户验证
-        if (com.denghongjie.ui.UserManager.login(username, password)) {
+        // 调用数据库验证
+        if (UserManager.login(username, password)) {
             new GameJFrame(); // 登录成功启动游戏
             dispose();
         } else {
